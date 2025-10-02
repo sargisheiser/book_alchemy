@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>📚My Library</h1>
+        <nav>
+            <a href="/add_author">Add Author</a> |
+            <a href="/add_book">Add Book</a>
+        </nav>
+    </header>
+
+    <section>
+        <h2>Books</h2>
+        <p>Sort by:
+            <a href="/?sort=title">Title</a> |
+            <a href="/?sort=author">Author</a>
+        </p>
+
+        {% if books %}
+            <div class="book-grid">
+                {% for book in books %}
+                    <div class="book-card">
+                        <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+                             alt="Cover for {{ book.title }}"
+                             onerror="this.style.display='none';">
+                        <div class="book-info">
+                            <h3>{{ book.title }}</h3>
+                            <p><strong>Author:</strong> {{ book.author.name }}</p>
+                            <p><strong>Year:</strong> {{ book.publication_year }}</p>
+                            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No books yet. Add some above ⬆️</p>
+        {% endif %}
+    </section>
+</body>
+</html>
