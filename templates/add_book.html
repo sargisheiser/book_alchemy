@@ -5,31 +5,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Add Book</h1>
-    {% if message %}
-        <p style="color: green;">{{ message }}</p>
-    {% endif %}
+<h1>Add Book</h1>
+{% if message %}
+<p style="color: green;">{{ message }}</p>
+{% endif %}
 
-    <form method="POST">
-        <label>ISBN:</label>
-        <input type="text" name="isbn" required><br><br>
 
-        <label>Title:</label>
-        <input type="text" name="title" required><br><br>
+<form method="post">
+    <label for="isbn">ISBN</label>
+    <input type="text" name="isbn" required>
 
-        <label>Publication Year:</label>
-        <input type="number" name="publication_year"><br><br>
 
-        <label>Author:</label>
-        <select name="author_id" required>
-            {% for author in authors %}
-                <option value="{{ author.id }}">{{ author.name }}</option>
-            {% endfor %}
-        </select><br><br>
+    <label for="title">Title</label>
+    <input type="text" name="title" required>
 
-        <button type="submit">Add Book</button>
-    </form>
 
-    <a href="/">Back to Home</a>
+    <label for="publication_year">Publication Year</label>
+    <input type="number" name="publication_year">
+
+
+    <label for="author_id">Author</label>
+    <select name="author_id" required>
+        {% for author in authors %}
+        <option value="{{ author.id }}">{{ author.name }}</option>
+        {% endfor %}
+    </select>
+
+
+    <label for="rating">Rating (1–10)</label>
+    <input type="number" name="rating" min="1" max="10">
+
+
+    <button type="submit">Add Book</button>
+</form>
+
+
+<a href="/">Back to Home</a>
 </body>
 </html>
+

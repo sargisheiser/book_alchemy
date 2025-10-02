@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ author.name }} - Author Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+    <h1>{{ author.name }}</h1>
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+</header>
+
+
+<section class="author-detail">
+    <p><strong>Born:</strong> {{ author.birth_date }}</p>
+    <p><strong>Died:</strong> {{ author.date_of_death or "Still alive" }}</p>
+
+
+    <h2>Books by {{ author.name }}</h2>
+    {% if author.book %}
+    <ul>
+        {% for book in author.book %}
+        <li>
+            <a href="{{ url_for('book_detail', book_id=book.id) }}">
+                {{ book.title }} ({{ book.publication_year }})
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No books for this author.</p>
+    {% endif %}
+
+
+    <form action="{{ url_for('delete_author', author_id=author.id) }}"
+          method="post" class="delete-form" style="margin-top:20px;">
+        <button type="submit"
+                onclick="return confirm('Delete author {{ author.name }} and ALL their books?');">
+            Delete Author
+        </button>
+    </form>
+</section>
+</body>
+</html>
+
