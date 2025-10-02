@@ -1,44 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Library Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <title>Library Home</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>📚My Library</h1>
-        <nav>
-            <a href="/add_author">Add Author</a> |
-            <a href="/add_book">Add Book</a>
-        </nav>
-    </header>
+   <header>
+       <h1>📚My Library</h1>
+       <nav>
+           <a href="/add_author">Add Author</a> |
+           <a href="/add_book">Add Book</a>
+       </nav>
+   </header>
 
-    <section>
-        <h2>Books</h2>
-        <p>Sort by:
-            <a href="/?sort=title">Title</a> |
-            <a href="/?sort=author">Author</a>
-        </p>
 
-        {% if books %}
-            <div class="book-grid">
-                {% for book in books %}
-                    <div class="book-card">
-                        <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
-                             alt="Cover for {{ book.title }}"
-                             onerror="this.style.display='none';">
-                        <div class="book-info">
-                            <h3>{{ book.title }}</h3>
-                            <p><strong>Author:</strong> {{ book.author.name }}</p>
-                            <p><strong>Year:</strong> {{ book.publication_year }}</p>
-                            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>No books yet. Add some above ⬆️</p>
-        {% endif %}
-    </section>
+   <section>
+       <h2>Search</h2>
+       <form method="get" action="/">
+           <input type="text" name="search" placeholder="Search by title or author" value="{{ search or '' }}">
+           <button type="submit">Search</button>
+       </form>
+   </section>
+
+
+   <section>
+       <h2>Books</h2>
+       <p>Sort by:
+           <a href="/?sort=title{% if search %}&search={{ search }}{% endif %}">Title</a> |
+           <a href="/?sort=author{% if search %}&search={{ search }}{% endif %}">Author</a>
+       </p>
+
+
+       {% if books %}
+           <div class="book-grid">
+               {% for book in books %}
+                   <div class="book-card">
+                       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+                            alt="Cover for {{ book.title }}"
+                            onerror="this.style.display='none';">
+                       <div class="book-info">
+                           <h3>{{ book.title }}</h3>
+                           <p><strong>Author:</strong> {{ book.author.name }}</p>
+                           <p><strong>Year:</strong> {{ book.publication_year }}</p>
+                           <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                       </div>
+                   </div>
+               {% endfor %}
+           </div>
+       {% else %}
+           {% if search %}
+               <p>No results found for "{{ search }}"</p>
+           {% else %}
+               <p>No books yet. Add some above ⬆️</p>
+           {% endif %}
+       {% endif %}
+   </section>
 </body>
 </html>
+
