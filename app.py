@@ -1,4 +1,5 @@
 import os
+from flask import redirect, url_for, flash
 from flask import Flask, render_template, request
 from datetime import datetime
 from data_models import db, Author, Book
@@ -90,6 +91,23 @@ def add_book():
        return render_template("add_book.html", authors=authors, message=message)
 
    return render_template("add_book.html", authors=authors)
+
+@app.route("/book/<int:book_id>/delete", methods=["POST"])
+def delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    author = book.author  # store reference for later
+
+    db.session.delete(book)
+    db.session.commit()
+
+    if not author.books:
+        db.session.delete(author)
+        db.session.commit()
+        flash(f"Book '{book.title}' and author '{author.name}' were deleted.", "success")
+    else:
+        flash(f"Book '{book.title}' was deleted.", "success")
+
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":
